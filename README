@@ -12,5 +12,30 @@ Usage: transport-daemon.sh (start|stop) <protocol-type> <args...>
 
 Usage: transport-test.sh (thrift|avro|protobuf) <args...>
 
+Note:
+
+1. Protobuf RPC uses Protocol Buffers RPC Server Implemention based on Mina(2.0.0-RC1) and Protobuf(2.1.0) found at http://github.com/jcai/fepss-rpc
+
+2. Project depends on the following libraries (./ lib) 
+
+bash-3.2$ ls -lt
+total 10984
+-rw-r--r--  1 amilkowski  admin    17110 Aug 30 13:09 tapestry5-annotations-5.2.0.jar
+-rw-r--r--  1 amilkowski  admin    47037 Aug 30 13:07 tapestry-func-5.2.0.jar
+-rw-r--r--  1 amilkowski  admin   642342 Aug 30 13:05 javassist.jar
+-rw-r--r--  1 amilkowski  admin   454035 Aug 30 13:03 tapestry-ioc-5.2.0.jar
+-rw-r--r--  1 amilkowski  admin  1698176 Aug 30 13:00 tapestry-core-5.2.0.jar
+-rw-r--r--  1 amilkowski  admin   288292 Aug 30 12:37 protobuf-java-2.1.0.jar
+-rw-r--r--  1 amilkowski  admin   638294 Aug 30 12:33 mina-core-2.0.0-RC1.jar
+-rw-r--r--  1 amilkowski  admin    45461 Aug 30 12:29 fepss-rpc-0.2.1-SNAPSHOT.jar
+-rw-r--r--  1 amilkowski  admin   481534 Aug 29 17:05 log4j-1.2.16.jar
+-rw-r--r--  1 amilkowski  admin     9753 Aug 29 17:03 slf4j-log4j12-1.6.1.jar
+-rw-r--r--  1 amilkowski  admin    25496 Aug 29 17:02 slf4j-api-1.6.1.jar
+-rw-r--r--  1 amilkowski  admin   187533 Aug 29 16:58 libthrift.jar
+-rw-r--r--  1 amilkowski  admin   485760 Aug 18 01:45 jackson-mapper-asl-1.5.6.jar
+-rw-r--r--  1 amilkowski  admin   172415 Aug 18 01:45 jackson-core-asl-1.5.6.jar
+-rw-r--r--  1 amilkowski  admin   339831 Jun  6 22:52 avro-1.3.3.jar
+-rw-r--r--  1 amilkowski  admin    60841 Nov 21  2007 commons-logging-1.1.1.jar
+
 
 
