@@ -1,0 +1,217 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.argmaps</groupId>
+  <artifactId>template-transport</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>template-transport</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <thrift.executable>/opt/local/src/thrift/current/bin/thrift</thrift.executable>
+    <proto.executable>/opt/local/src/google-protobuf/protobuf-2.1.0/dist/bin/protoc</proto.executable>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.thrift</groupId>
+      <artifactId>libthrift</artifactId>
+      <version>0.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>avro</artifactId>
+      <version>1.3.3</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.fepss.rpc</groupId>
+      <artifactId>fepss-rpc</artifactId>
+      <version>0.2.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jmock</groupId>
+      <artifactId>jmock-junit4</artifactId>
+      <version>2.5.1</version>
+      </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>template-transport</finalName>
+    <plugins>
+      <!-- Generate Thrift sources -->
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>generate-thrift-sources</id>
+                <phase>generate-sources</phase>
+                  <configuration>
+                    <tasks>
+                      <mkdir dir="thrift" />
+                      <delete>
+                        <fileset dir="thrift/gen-java" includes="**/*"/>
+                      </delete>
+                      <exec executable="${thrift.executable}">
+                        <arg value="--gen" />
+                        <arg value="java" />
+                        <arg value="-o" />
+                        <arg value="thrift" />
+                        <arg value="src/main/java/com/argmaps/transport/thrift/Transport.thrift" />
+                      </exec>
+                    </tasks>
+                  </configuration>
+                <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- generate Avro sources -->
+      <plugin>
+        <groupId>org.apache.avro</groupId>
+        <artifactId>avro-maven-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <id>generate-avro-sources</id>
+            <phase>generate-sources</phase>
+            <configuration>
+              <tasks>
+                <mkdir dir="avro" />
+                <delete>
+                  <fileset dir="avro" includes="**/*"/>
+                </delete>
+              </tasks>
+              <sourceDirectory>src/main/java/com/argmaps/transport/avro</sourceDirectory>
+              <outputDirectory>avro</outputDirectory>
+            </configuration>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- run Paranamer on Avro generated sources -->
+      <plugin>
+        <groupId>com.thoughtworks.paranamer</groupId>
+        <artifactId>paranamer-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>run-paranamer</id>  
+            <configuration>
+              <sourceDirectory>${project.build.directory}/classes/com/argmaps/transport/avro/generated</sourceDirectory>
+              <outputDirectory>${project.build.directory}/classes/classes/com/argmaps/transport/avro/generated</outputDirectory>
+            </configuration>        
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- Generate Protobuf sources -->
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-proto-sources</id>
+            <phase>generate-sources</phase>
+            <configuration>
+              <tasks>
+                <mkdir dir="proto"/>
+                <delete>                  
+		  <fileset dir="proto" includes="**/*"/>
+                </delete>
+                <exec executable="${proto.executable}">
+                  <arg value="--java_out=proto"/>
+                  <arg value="src/main/java/com/argmaps/transport/proto/ProtoServer.proto"/>
+              </exec>
+            </tasks>
+            <sourceRoot>target/generated-sources</sourceRoot>
+          </configuration>
+          <goals>
+            <goal>run</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+      <!-- Add Generated Sources -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>thrift/gen-java</source>
+                <source>avro</source>
+                <source>proto</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- Compile -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+      <!-- Run Unit Tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+      <!-- Create Jar -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <useDefaultManifestFile>true</useDefaultManifestFile>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <reporting>
+    <plugins>
+      <!-- Find Bugs -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+</project>

@@ -1,0 +1,16 @@
+Template for Client/Server Transport/Protocols
+
+1. Thrift       +base +jmock -benchmark -complex data 
+2. Avro         +base +jmock -benchmark -complex data
+3. Protobuf     +base -jmock -benchmark -complex data
+
+Where possible, will include range of data structure/API's/Exception handling and benchmarking
+
+Planned test beds for clients in: java/scala/ruby
+
+Usage: transport-daemon.sh (start|stop) <protocol-type> <args...>
+
+Usage: transport-test.sh (thrift|avro|protobuf) <args...>
+
+
+

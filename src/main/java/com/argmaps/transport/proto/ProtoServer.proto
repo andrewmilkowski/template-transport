@@ -1,0 +1,18 @@
+// http://code.google.com/apis/protocolbuffers/docs/proto.html
+package protobuf.rpc;
+
+option java_package = "com.argmaps.transport.proto.generated";
+option java_outer_classname = "TransportServer";
+
+message DefaultLongValue {
+  optional int64 longValue = 1;
+}
+
+message LongValue {
+  required int64 longValue = 1;
+  optional bool success = 2;
+}
+
+service ProtoService {
+  rpc getLongValue(DefaultLongValue) returns(LongValue);
+}

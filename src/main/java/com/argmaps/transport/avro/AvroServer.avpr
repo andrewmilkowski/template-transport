@@ -1,0 +1,11 @@
+{
+    "protocol" : "TransportServer",
+    "namespace" : "com.argmaps.transport.avro.generated",
+
+    "messages": {
+        "getLongValue": {
+            "request": [],
+            "response": "long"
+        }
+    }
+}
