@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-usage="Usage: transport-test.sh (thrift|avro|protobuf) <args...>"
+usage="Usage: transport-test.sh (thrift|avro|proto) <args...>"
 
 # if no args specified, show usage
 if [ $# -eq 0 ]; then

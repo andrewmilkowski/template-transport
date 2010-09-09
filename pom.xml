@@ -108,8 +108,6 @@
                   <fileset dir="avro" includes="**/*"/>
                 </delete>
               </tasks>
-              <sourceDirectory>src/main/java/com/argmaps/transport/avro</sourceDirectory>
-              <outputDirectory>avro</outputDirectory>
             </configuration>
             <goals>
               <goal>compile</goal>
@@ -202,6 +200,19 @@
         <configuration>
           <useDefaultManifestFile>true</useDefaultManifestFile>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.zeroturnaround</groupId>
+        <artifactId>javarebel-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-rebel-xml</id>
+            <phase>process-resources</phase>
+            <goals>
+             <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
