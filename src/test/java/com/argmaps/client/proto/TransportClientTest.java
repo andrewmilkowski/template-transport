@@ -11,8 +11,6 @@ import org.junit.runner.RunWith;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 
-import com.argmaps.transport.proto.generated.TransportServer.LongValue;
-
 import static org.junit.Assert.assertEquals;
 
 public class TransportClientTest {
